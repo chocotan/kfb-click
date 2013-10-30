@@ -19,6 +19,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
 
 public class AdAutoClick {
     private final String pwuser;
@@ -28,7 +29,7 @@ public class AdAutoClick {
     private static final String INDEX = SITE + "index.php";
     private static final String LOGIN = SITE + "login.php";
     private static final String BOXLINK = SITE + "kf_smbox.php";
-
+    private static Logger logger = Logger.getLogger(AdAutoClick.class);
     public AdAutoClick(String pwuser, String pwpwd) {
         this.pwuser = pwuser;
         this.pwpwd = pwpwd;
@@ -58,9 +59,9 @@ public class AdAutoClick {
         }
         // 登陆成功
         if (result.contains("您已经顺利登录") || result.contains("重复")) {
-            System.out.println("登陆成功, 开始点广告");
+            logger.info("登陆成功, 开始点广告");
         } else {
-            System.err.println("用户名密码错误");
+            logger.error("用户名密码错误");
             System.exit(1);
         }
     }
@@ -114,16 +115,17 @@ public class AdAutoClick {
         String output = findString(boxResult, "(获得了\\d+KFB的奖励)");
         int min = 0;
         if (boxResult.contains("获得了")) {
+            min = 5 * 60;
             if (output.length() == 0) {
                 output = findString(boxResult, "(获得了\\d+KFB的奖励)");
                 min = 5 * 60;
             }
-            System.out.println(output);
+            logger.info(output);
         } else {
             min = 20;
-            System.out.print("您已点过, ");
+            logger.info("您已点过");
         }
-        System.out.println("等待" + min + "分钟再获取");
+        logger.info("等待" + min + "分钟再获取");
         try {
             Thread.sleep(min * 60 * 1000);
         } catch (InterruptedException e) {
@@ -133,7 +135,7 @@ public class AdAutoClick {
 
     public static void main(String[] args) {
         if (args.length < 2) {
-            System.err.println("参数错误");
+            logger.error("参数错误");
             System.exit(1);
         }
         String pwuser = args[0];
@@ -142,11 +144,11 @@ public class AdAutoClick {
         for (int i = 1;; i++) {
             try {
                 AdAutoClick aac = new AdAutoClick(pwuser, pwpwd);
-                System.out.println("第" + i + "次");
+                logger.info("第" + i + "次");
                 aac.clickAdAndGetKFB();
             } catch (Exception e) {
                 e.printStackTrace();
-                System.err.println("发生错误, 20分钟后再次尝试");
+                logger.error("发生错误, 20分钟后再次尝试");
                 try {
                     Thread.sleep(20 * 60 * 60 * 1000);
                 } catch (InterruptedException e1) {
