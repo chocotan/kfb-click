@@ -145,6 +145,12 @@ public class AdAutoClick {
                 aac.clickAdAndGetKFB();
             } catch (Exception e) {
                 e.printStackTrace();
+                System.err.println("发生错误, 20分钟后再次尝试");
+                try {
+                    Thread.sleep(20 * 60 * 60 * 1000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
             }
         }
 
