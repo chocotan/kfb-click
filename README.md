@@ -7,11 +7,7 @@ kfb-click
 
 ###使用方法###
 windows:
-请先安装git和mavenmac
-git: http://git-scm.com/
-maven: http://maven.apache.org/
-mac和linux:
-自行解决(应该比windows简单多了)
+请先安装 [git](http://git-scm.com/,"git")和[maven](http://maven.apache.org/,"maven")
 
 ####先编译####
 ```
