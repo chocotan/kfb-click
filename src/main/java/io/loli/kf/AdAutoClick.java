@@ -118,10 +118,11 @@ public class AdAutoClick {
                 output = findString(boxResult, "(获得了\\d+KFB的奖励)");
                 min = 5 * 60;
             }
+            System.out.println(output);
         } else {
             min = 20;
+            System.out.print("您已点过, ");
         }
-        System.out.println(output);
         System.out.println("等待" + min + "分钟再获取");
         try {
             Thread.sleep(min * 60 * 1000);
