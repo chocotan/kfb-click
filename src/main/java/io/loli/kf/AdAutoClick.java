@@ -57,7 +57,7 @@ public class AdAutoClick {
             e.printStackTrace();
         }
         // 登陆成功
-        if (result.contains("您已经顺利登录")) {
+        if (result.contains("您已经顺利登录") || result.contains("重复")) {
             System.out.println("登陆成功, 开始点广告");
         } else {
             System.err.println("用户名密码错误");
