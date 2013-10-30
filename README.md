@@ -6,6 +6,12 @@ kfb-click
 ---------
 
 ###使用方法###
+windows:
+请先安装git和mavenmac
+git: http://git-scm.com/
+maven: http://maven.apache.org/
+mac和linux:
+自行解决(应该比windows简单多了)
 
 ####先编译####
 ```
