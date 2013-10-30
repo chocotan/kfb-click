@@ -30,6 +30,7 @@ public class AdAutoClick {
     private static final String LOGIN = SITE + "login.php";
     private static final String BOXLINK = SITE + "kf_smbox.php";
     private static Logger logger = Logger.getLogger(AdAutoClick.class);
+
     public AdAutoClick(String pwuser, String pwpwd) {
         this.pwuser = pwuser;
         this.pwpwd = pwpwd;
@@ -82,10 +83,8 @@ public class AdAutoClick {
             response = httpclient.execute(httpget);
             HttpEntity entity = response.getEntity();
             result = EntityUtils.toString(entity);
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("连接出现问题");
         }
         return result;
     }
@@ -133,6 +132,24 @@ public class AdAutoClick {
         }
     }
 
+    // 每隔6分钟刷新一次, 增加在线时间
+    public void refresh() {
+        new Thread() {
+            @Override
+            public void run() {
+                for (;;) {
+                    get(INDEX);
+                    logger.info("刷新");
+                    try {
+                        Thread.sleep(6 * 60 * 1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.start();
+    }
+
     public static void main(String[] args) {
         if (args.length < 2) {
             logger.error("参数错误");
@@ -140,14 +157,19 @@ public class AdAutoClick {
         }
         String pwuser = args[0];
         String pwpwd = args[1];
+        boolean refresh = args.length == 3 ? Boolean.parseBoolean(args[2])
+                : true;
+        AdAutoClick aac = new AdAutoClick(pwuser, pwpwd);
+
+        if (refresh) {
+            aac.refresh();
+        }
 
         for (int i = 1;; i++) {
             try {
-                AdAutoClick aac = new AdAutoClick(pwuser, pwpwd);
                 logger.info("第" + i + "次");
                 aac.clickAdAndGetKFB();
             } catch (Exception e) {
-                e.printStackTrace();
                 logger.error("发生错误, 20分钟后再次尝试");
                 try {
                     Thread.sleep(20 * 60 * 60 * 1000);
@@ -156,6 +178,5 @@ public class AdAutoClick {
                 }
             }
         }
-
     }
 }
