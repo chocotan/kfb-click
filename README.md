@@ -12,7 +12,7 @@ kfb-click
 
 或者
 
-只安装maven, 下载[这个](https://github.com/chocotan/kfb-click/archive/master.zip), 然后cd进此目录后执行下面的mvn命令
+只安装maven, 下载[这个](https://github.com/chocotan/kfb-click/archive/master.zip), 解压后cd进此目录后执行下面的mvn命令
 ####mac和linux####
 安装完git和maven后, 直接运行下面的命令
 
