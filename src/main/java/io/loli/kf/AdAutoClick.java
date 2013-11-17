@@ -159,6 +159,7 @@ public class AdAutoClick {
 
     public void start() {
         this.refresh();
+        this.autoDonate();
         for (int i = 1;; i++) {
             try {
                 logger.info("第" + i + "次");
@@ -180,6 +181,7 @@ public class AdAutoClick {
             try {
                 logger.info("第" + i + "次");
                 this.clickAdAndGetKFB();
+                this.levelUp();
             } catch (Exception e) {
                 logger.error("发生错误, 20分钟后再次尝试");
                 try {
@@ -203,6 +205,7 @@ public class AdAutoClick {
         return Integer.parseInt(levelUpKFB);
     }
 
+    @SuppressWarnings("unused")
     private int getLevelUpKFB(int sMLevel) {
         if (sMLevel < 0) {
             return 100;
@@ -213,6 +216,27 @@ public class AdAutoClick {
         } else {
             return 5000 + sMLevel * 3;
         }
+    }
+
+    private void autoDonate() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                donate();
+                try {
+                    Thread.sleep(1000 * 60 * 60 * 24);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+        ;
+    }
+
+    private void donate() {
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("kfb", "1"));
+        this.post("http://9gal.com/kf_growup.php?ok=1", params);
     }
 
     private int getNowKFB() {
