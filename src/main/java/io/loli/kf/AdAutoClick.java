@@ -31,22 +31,9 @@ public class AdAutoClick {
     private static final String BOXLINK = SITE + "kf_smbox.php";
     private static Logger logger = Logger.getLogger(AdAutoClick.class);
 
-    public AdAutoClick(String pwuser, String pwpwd) {
-        this.pwuser = pwuser;
-        this.pwpwd = pwpwd;
-    }
-
-    private void login() {
+    private String post(String url, List<NameValuePair> params) {
         HttpPost hp = new HttpPost(LOGIN);
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.addAll(Arrays.asList(new NameValuePair[] {
-                new BasicNameValuePair("pwuser", pwuser),
-                new BasicNameValuePair("pwpwd", pwpwd),
-                new BasicNameValuePair("hideid", "0"),
-                new BasicNameValuePair("cktime", "0"),
-                new BasicNameValuePair("jumpurl", INDEX),
-                new BasicNameValuePair("step", "2"),
-                new BasicNameValuePair("lgt", "1") }));
+
         CloseableHttpResponse response = null;
         String result = null;
         try {
@@ -58,9 +45,23 @@ public class AdAutoClick {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return result;
+    }
+
+    private void login() {
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.addAll(Arrays.asList(new NameValuePair[] {
+                new BasicNameValuePair("pwuser", pwuser),
+                new BasicNameValuePair("pwpwd", pwpwd),
+                new BasicNameValuePair("hideid", "0"),
+                new BasicNameValuePair("cktime", "0"),
+                new BasicNameValuePair("jumpurl", INDEX),
+                new BasicNameValuePair("step", "2"),
+                new BasicNameValuePair("lgt", "1") }));
+        String result = this.post(LOGIN, params);
         // 登陆成功
         if (result.contains("您已经顺利登录") || result.contains("重复")) {
-            logger.info("登陆成功, 开始点广告");
+            logger.info("登陆成功");
         } else {
             logger.error("用户名密码错误");
             System.exit(1);
@@ -150,25 +151,19 @@ public class AdAutoClick {
         }.start();
     }
 
-    public static void main(String[] args) {
-        if (args.length < 2) {
-            logger.error("参数错误");
-            System.exit(1);
-        }
-        String pwuser = args[0];
-        String pwpwd = args[1];
-        boolean refresh = args.length == 3 ? Boolean.parseBoolean(args[2])
-                : true;
-        AdAutoClick aac = new AdAutoClick(pwuser, pwpwd);
+    public AdAutoClick(String pwuser, String pwpwd) {
+        this.pwuser = pwuser;
+        this.pwpwd = pwpwd;
 
-        if (refresh) {
-            aac.refresh();
-        }
+    }
 
+    public void start() {
+        this.refresh();
         for (int i = 1;; i++) {
             try {
                 logger.info("第" + i + "次");
-                aac.clickAdAndGetKFB();
+                this.clickAdAndGetKFB();
+                this.levelUp();
             } catch (Exception e) {
                 logger.error("发生错误, 20分钟后再次尝试");
                 try {
@@ -178,5 +173,80 @@ public class AdAutoClick {
                 }
             }
         }
+    }
+
+    public void start(int time) {
+        for (int i = 1; i < time; i++) {
+            try {
+                logger.info("第" + i + "次");
+                this.clickAdAndGetKFB();
+            } catch (Exception e) {
+                logger.error("发生错误, 20分钟后再次尝试");
+                try {
+                    Thread.sleep(20 * 60 * 60 * 1000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private int getSMLevel() {
+        String result = this.get("http://9gal.com/kf_fw_rvrc.php");
+        String smLevelStr = this.findString(result, "我的\"神秘\"等级为：([0-9]+)");
+        return Integer.parseInt(smLevelStr);
+    }
+
+    private int getLevelUpKFB() {
+        String result = this.get("http://9gal.com/kf_fw_rvrc.php");
+        String levelUpKFB = this.findString(result, "升级需要消耗\"KFB\"： ([0-9]+)");
+        return Integer.parseInt(levelUpKFB);
+    }
+
+    private int getLevelUpKFB(int sMLevel) {
+        if (sMLevel < 0) {
+            return 100;
+        } else if (sMLevel > 0 && sMLevel <= 50) {
+            return (sMLevel + 2) * 100;
+        } else if (sMLevel > 50 && sMLevel <= 200) {
+            return 5000;
+        } else {
+            return 5000 + sMLevel * 3;
+        }
+    }
+
+    private int getNowKFB() {
+        String result = this.get("http://9gal.com/kf_fw_rvrc.php");
+        String nowKFB = this.findString(result, "我的\"KFB\"为：([0-9]+)");
+        return Integer.parseInt(nowKFB);
+    }
+
+    private boolean levelUp() {
+        if (getNowKFB() >= getLevelUpKFB()) {
+            levelUpPost();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void levelUpPost() {
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("kf_fw_rvrc_tongyi", "1"));
+        this.post("http://9gal.com/kf_fw_rvrc.php?rvrc=1", params);
+    }
+
+    public static void main(String[] args) {
+        if (args.length < 2) {
+            logger.error("参数错误");
+            System.exit(1);
+        }
+        String pwuser = args[0];
+        String pwpwd = args[1];
+        AdAutoClick aac = new AdAutoClick(pwuser, pwpwd);
+        aac.login();
+        System.out.println(aac.getSMLevel());
+        System.out.println(aac.getLevelUpKFB());
+        System.out.println(aac.getNowKFB());
     }
 }
