@@ -24,14 +24,14 @@ import org.apache.log4j.Logger;
 public class AdAutoClick {
     private final String pwuser;
     private final String pwpwd;
-    private static CloseableHttpClient httpclient = HttpClients.createDefault();
+    private CloseableHttpClient httpclient = HttpClients.createDefault();
     private static final String SITE = "http://9gal.com/";
     private static final String INDEX = SITE + "index.php";
     private static final String LOGIN = SITE + "login.php";
     private static final String BOXLINK = SITE + "kf_smbox.php";
     private static Logger logger = Logger.getLogger(AdAutoClick.class);
 
-    private String post(String url, List<NameValuePair> params) {
+    public String post(String url, List<NameValuePair> params) {
         HttpPost hp = new HttpPost(LOGIN);
 
         CloseableHttpResponse response = null;
@@ -58,7 +58,7 @@ public class AdAutoClick {
                 new BasicNameValuePair("jumpurl", INDEX),
                 new BasicNameValuePair("step", "2"),
                 new BasicNameValuePair("lgt", "1") }));
-        String result = this.post(LOGIN, params);
+        String result = post(LOGIN, params);
         // 登陆成功
         if (result.contains("您已经顺利登录") || result.contains("重复")) {
             logger.info("登陆成功");
@@ -76,7 +76,7 @@ public class AdAutoClick {
         return finalLink;
     }
 
-    private String get(String link) {
+    public String get(String link) {
         HttpGet httpget = new HttpGet(link);
         HttpResponse response;
         String result = null;
@@ -193,14 +193,17 @@ public class AdAutoClick {
         }
     }
 
+    private static final String SMUP = SITE + "kf_fw_rvrc.php";
+
+    @SuppressWarnings("unused")
     private int getSMLevel() {
-        String result = this.get("http://9gal.com/kf_fw_rvrc.php");
+        String result = get(SMUP);
         String smLevelStr = this.findString(result, "我的\"神秘\"等级为：([0-9]+)");
         return Integer.parseInt(smLevelStr);
     }
 
     private int getLevelUpKFB() {
-        String result = this.get("http://9gal.com/kf_fw_rvrc.php");
+        String result = get(SMUP);
         String levelUpKFB = this.findString(result, "升级需要消耗\"KFB\"： ([0-9]+)");
         return Integer.parseInt(levelUpKFB);
     }
@@ -233,14 +236,16 @@ public class AdAutoClick {
         ;
     }
 
+    private final static String DONATE = SITE + "kf_growup.php?ok=1";
+
     private void donate() {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("kfb", "1"));
-        this.post("http://9gal.com/kf_growup.php?ok=1", params);
+        post(DONATE, params);
     }
 
     private int getNowKFB() {
-        String result = this.get("http://9gal.com/kf_fw_rvrc.php");
+        String result = get(SMUP);
         String nowKFB = this.findString(result, "我的\"KFB\"为：([0-9]+)");
         return Integer.parseInt(nowKFB);
     }
@@ -254,10 +259,12 @@ public class AdAutoClick {
         }
     }
 
+    private final static String LVUP = SITE + "kf_fw_rvrc.php?rvrc=1";
+
     private void levelUpPost() {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("kf_fw_rvrc_tongyi", "1"));
-        this.post("http://9gal.com/kf_fw_rvrc.php?rvrc=1", params);
+        post(LVUP, params);
     }
 
     public static void main(String[] args) {
@@ -268,9 +275,6 @@ public class AdAutoClick {
         String pwuser = args[0];
         String pwpwd = args[1];
         AdAutoClick aac = new AdAutoClick(pwuser, pwpwd);
-        aac.login();
-        System.out.println(aac.getSMLevel());
-        System.out.println(aac.getLevelUpKFB());
-        System.out.println(aac.getNowKFB());
+        aac.start();
     }
 }
