@@ -158,6 +158,7 @@ public class AdAutoClick {
     }
 
     public void start() {
+        this.login();
         this.refresh();
         this.autoDonate();
         this.autoBuyVIP();
@@ -302,7 +303,6 @@ public class AdAutoClick {
         String pwuser = args[0];
         String pwpwd = args[1];
         AdAutoClick aac = new AdAutoClick(pwuser, pwpwd);
-        aac.login();
-        aac.buyVIP();
+        aac.start();
     }
 }
