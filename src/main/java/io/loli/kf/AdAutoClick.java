@@ -275,7 +275,7 @@ public class AdAutoClick {
     private void buyVIP() {
         String res = this.get(VIP);
         String link = this.findString(res, "(kf_vmember.php\\?vip=[^\"]+)");
-        this.get(link);
+        this.get(SITE + link);
     }
 
     private void autoBuyVIP() {
