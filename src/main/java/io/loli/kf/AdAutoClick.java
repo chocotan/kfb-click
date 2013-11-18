@@ -160,6 +160,7 @@ public class AdAutoClick {
     public void start() {
         this.refresh();
         this.autoDonate();
+        this.autoBuyVIP();
         for (int i = 1;; i++) {
             try {
                 logger.info("第" + i + "次");
@@ -253,6 +254,7 @@ public class AdAutoClick {
     private boolean levelUp() {
         if (getNowKFB() >= getLevelUpKFB()) {
             levelUpPost();
+            logger.info("自动升级成功");
             return true;
         } else {
             return false;
@@ -267,6 +269,31 @@ public class AdAutoClick {
         post(LVUP, params);
     }
 
+    private final static String VIP = SITE + "kf_vmember.php";
+
+    private void buyVIP() {
+        String res = this.get(VIP);
+        String link = this.findString(res, "(kf_vmember.php\\?vip=[^\"]+)");
+        this.get(link);
+    }
+
+    private void autoBuyVIP() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (;;) {
+                    buyVIP();
+                    logger.info("购买vip");
+                    try {
+                        Thread.sleep(7 * 24 * 60 * 60);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+    }
+
     public static void main(String[] args) {
         if (args.length < 2) {
             logger.error("参数错误");
@@ -275,6 +302,7 @@ public class AdAutoClick {
         String pwuser = args[0];
         String pwpwd = args[1];
         AdAutoClick aac = new AdAutoClick(pwuser, pwpwd);
-        aac.start();
+        aac.login();
+        aac.buyVIP();
     }
 }
