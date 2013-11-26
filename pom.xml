@@ -30,7 +30,6 @@
 		<connection>scm:git:git@github.com:chocotan/kfb-click.git</connection>
 		<url>git@github.com:chocotan/kfb-click.git</url>
 		<developerConnection>scm:git:git@github.com:chocotan/kfb-click.git</developerConnection>
-		<tag>kf-0.0.13</tag>
 	</scm>
 
 	<distributionManagement>
