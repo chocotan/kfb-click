@@ -2,15 +2,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.loli</groupId>
 	<artifactId>kf</artifactId>
-	<version>0.0.17-SNAPSHOT</version>
+	<version>0.0.18-SNAPSHOT</version>
 	<url>https://github.com/chocotan/kfb-click</url>
-
-
-
-
-
-
-
 	<developers>
 		<developer>
 			<id>choco</id>
