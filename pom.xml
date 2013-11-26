@@ -5,6 +5,8 @@
 	<artifactId>kf</artifactId>
 	<version>0.0.10-SNAPSHOT</version>
 	<url>https://github.com/chocotan/kfb-click</url>
+	
+	
 	<developers>
 		<developer>
 			<id>choco</id>
@@ -33,6 +35,7 @@
 		<developerConnection>scm:git:git@github.com:chocotan/kfb-click.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
+	
 	<distributionManagement>
 		<!-- Repository for snapshots -->
 		<snapshotRepository>
