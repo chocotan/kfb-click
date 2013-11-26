@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.loli</groupId>
 	<artifactId>kf</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<url>https://github.com/chocotan/kfb-click</url>
 	<developers>
 		<developer>
@@ -31,19 +31,6 @@
 		<developerConnection>scm:git:git@github.com:chocotan/kfb-click.git</developerConnection>
 	  <tag>kf-0.0.1</tag>
   </scm>
-	<distributionManagement>
-		<!-- Repository for snapshots -->
-		<snapshotRepository>
-			<id>sonatype-nexus-snapshots</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-		<!-- Repository for releases -->
-		<repository>
-			<id>nexus-releases</id>
-			<name>Nexus Release Repository</name>
-			<url>http://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-		</repository>
-	</distributionManagement>
 
 
 	<dependencies>
