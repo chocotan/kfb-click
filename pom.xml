@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.loli</groupId>
 	<artifactId>kf</artifactId>
-	<version>0.0.11-SNAPSHOT</version>
+	<version>0.0.12</version>
 	<url>https://github.com/chocotan/kfb-click</url>
 	
 	
@@ -32,7 +32,7 @@
 		<connection>scm:git:git@github.com:chocotan/kfb-click.git</connection>
 		<url>git@github.com:chocotan/kfb-click.git</url>
 		<developerConnection>scm:git:git@github.com:chocotan/kfb-click.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>kf-0.0.11</tag>
 	</scm>
 	
 	<distributionManagement>
