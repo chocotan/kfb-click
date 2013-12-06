@@ -165,8 +165,8 @@ public class AdAutoClick {
         for (int i = 1;; i++) {
             try {
                 logger.info("第" + i + "次");
-                this.clickAdAndGetKFB();
                 this.levelUp();
+                this.clickAdAndGetKFB();
             } catch (Exception e) {
                 logger.error("发生错误, 20分钟后再次尝试");
                 try {
@@ -182,8 +182,8 @@ public class AdAutoClick {
         for (int i = 1; i < time; i++) {
             try {
                 logger.info("第" + i + "次");
-                this.clickAdAndGetKFB();
                 this.levelUp();
+                this.clickAdAndGetKFB();
             } catch (Exception e) {
                 logger.error("发生错误, 20分钟后再次尝试");
                 try {
