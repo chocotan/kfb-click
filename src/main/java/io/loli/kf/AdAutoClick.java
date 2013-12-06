@@ -268,7 +268,7 @@ public class AdAutoClick {
     private void levelUpPost() {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("kf_fw_rvrc_tongyi", "1"));
-        System.out.println(post(LVUP, params));
+        post(LVUP, params);
     }
 
     private final static String VIP = SITE + "kf_vmember.php";
