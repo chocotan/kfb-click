@@ -32,7 +32,7 @@ public class AdAutoClick {
     private static Logger logger = Logger.getLogger(AdAutoClick.class);
 
     public String post(String url, List<NameValuePair> params) {
-        HttpPost hp = new HttpPost(LOGIN);
+        HttpPost hp = new HttpPost(url);
 
         CloseableHttpResponse response = null;
         String result = null;
