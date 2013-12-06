@@ -207,7 +207,7 @@ public class AdAutoClick {
     private int getLevelUpKFB() {
         String result = get(SMUP);
         String levelUpKFB = this.findString(result, "升级需要消耗\"KFB\"： ([0-9]+)");
-        log.info("升级的kfb:" + levelUpKFB);
+        logger.info("升级的kfb:" + levelUpKFB);
         return Integer.parseInt(levelUpKFB);
     }
 
@@ -249,7 +249,7 @@ public class AdAutoClick {
     private int getNowKFB() {
         String result = get(SMUP);
         String nowKFB = this.findString(result, "我的\"KFB\"为：([0-9]+)");
-        log.info("现在的kfb:" + nowKFB);
+        logger.info("现在的kfb:" + nowKFB);
         return Integer.parseInt(nowKFB);
     }
 
