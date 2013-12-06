@@ -200,14 +200,14 @@ public class AdAutoClick {
     @SuppressWarnings("unused")
     private int getSMLevel() {
         String result = get(SMUP);
-        String smLevelStr = this.findString(result, "我的\"神秘\"等级为：([0-9]+)");
+        String smLevelStr = this.findString(result, "我的\"神秘\"等级为： ([0-9]+)");
         return Integer.parseInt(smLevelStr);
     }
 
     private int getLevelUpKFB() {
         String result = get(SMUP);
         String levelUpKFB = this.findString(result, "升级需要消耗\"KFB\"： ([0-9]+)");
-        System.out.println("现在的kfb:"+levelUpKFB);
+        log.info("升级的kfb:" + levelUpKFB);
         return Integer.parseInt(levelUpKFB);
     }
 
@@ -236,7 +236,6 @@ public class AdAutoClick {
                 }
             }
         }).start();
-        ;
     }
 
     private final static String DONATE = SITE + "kf_growup.php?ok=1";
@@ -250,7 +249,7 @@ public class AdAutoClick {
     private int getNowKFB() {
         String result = get(SMUP);
         String nowKFB = this.findString(result, "我的\"KFB\"为：([0-9]+)");
-        System.out.println("现在的kfb:"+nowKFB);
+        log.info("现在的kfb:" + nowKFB);
         return Integer.parseInt(nowKFB);
     }
 
@@ -269,7 +268,7 @@ public class AdAutoClick {
     private void levelUpPost() {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("kf_fw_rvrc_tongyi", "1"));
-        post(LVUP, params);
+        System.out.println(post(LVUP, params));
     }
 
     private final static String VIP = SITE + "kf_vmember.php";
