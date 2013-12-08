@@ -32,7 +32,7 @@ public class AdAutoClick {
     private static Logger logger = Logger.getLogger(AdAutoClick.class);
 
     public String post(String url, List<NameValuePair> params) {
-        HttpPost hp = new HttpPost(LOGIN);
+        HttpPost hp = new HttpPost(url);
 
         CloseableHttpResponse response = null;
         String result = null;
@@ -165,8 +165,8 @@ public class AdAutoClick {
         for (int i = 1;; i++) {
             try {
                 logger.info("第" + i + "次");
-                this.clickAdAndGetKFB();
                 this.levelUp();
+                this.clickAdAndGetKFB();
             } catch (Exception e) {
                 logger.error("发生错误, 20分钟后再次尝试");
                 try {
@@ -182,8 +182,8 @@ public class AdAutoClick {
         for (int i = 1; i < time; i++) {
             try {
                 logger.info("第" + i + "次");
-                this.clickAdAndGetKFB();
                 this.levelUp();
+                this.clickAdAndGetKFB();
             } catch (Exception e) {
                 logger.error("发生错误, 20分钟后再次尝试");
                 try {
@@ -200,13 +200,14 @@ public class AdAutoClick {
     @SuppressWarnings("unused")
     private int getSMLevel() {
         String result = get(SMUP);
-        String smLevelStr = this.findString(result, "我的\"神秘\"等级为：([0-9]+)");
+        String smLevelStr = this.findString(result, "我的\"神秘\"等级为： ([0-9]+)");
         return Integer.parseInt(smLevelStr);
     }
 
     private int getLevelUpKFB() {
         String result = get(SMUP);
         String levelUpKFB = this.findString(result, "升级需要消耗\"KFB\"： ([0-9]+)");
+        logger.info("升级的kfb:" + levelUpKFB);
         return Integer.parseInt(levelUpKFB);
     }
 
@@ -235,7 +236,6 @@ public class AdAutoClick {
                 }
             }
         }).start();
-        ;
     }
 
     private final static String DONATE = SITE + "kf_growup.php?ok=1";
@@ -249,6 +249,7 @@ public class AdAutoClick {
     private int getNowKFB() {
         String result = get(SMUP);
         String nowKFB = this.findString(result, "我的\"KFB\"为：([0-9]+)");
+        logger.info("现在的kfb:" + nowKFB);
         return Integer.parseInt(nowKFB);
     }
 
